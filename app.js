@@ -6,8 +6,22 @@ const session = require("cookie-session");
 
 const connectDB = require("./db/connect");
 
+app.use(express.json());
+app.use(session({
+  secret: process.env.SECRET,
+  cookie: {
+    maxAge: 10 * 60 * 100000,
+  },
+  saveUninitialized: true,
+  resave: false
+}));
+
+app.get("/", (req, res) => {
+  res.send("Welcome to the Social");
+})
+
 const start = async () => {
-  await connectDB(process.env.MONGO_URI)
+  await connectDB(process.env.MONGO_URI);
   app.listen(3000, () => {
     console.log("App is listening on port 3000...");
   })
