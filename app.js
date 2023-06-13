@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require('express');
 const app = express();
 const session = require("cookie-session");
+const passport = require('passport');
 
 const connectDB = require("./db/connect");
 
@@ -15,6 +16,8 @@ app.use(session({
   saveUninitialized: true,
   resave: false
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Social");
