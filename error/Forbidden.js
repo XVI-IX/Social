@@ -8,6 +8,4 @@ class ForbiddenError extends CustomError {
   }
 }
 
-module.exports = {
-  ForbiddenError
-}
+module.exports = {ForbiddenError};

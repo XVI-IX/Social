@@ -3,9 +3,12 @@ require("dotenv").config();
 const express = require('express');
 const app = express();
 const session = require("cookie-session");
-const passport = require('passport');
-
 const connectDB = require("./db/connect");
+
+const passport = require('passport');
+require("./controllers/auth");
+
+const authRouter = require("./routes/auth");
 
 app.use(express.json());
 app.use(session({
@@ -22,6 +25,8 @@ app.use(passport.session());
 app.get("/", (req, res) => {
   res.send("Welcome to the Social");
 })
+
+app.use(authRouter)
 
 const start = async () => {
   await connectDB(process.env.MONGO_URI);

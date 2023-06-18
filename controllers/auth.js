@@ -1,13 +1,18 @@
+require("dotenv").config();
+
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const { User } = require("./models");
+const JWTStrategy = require("passport-jwt").Strategy;
+const ExtractJWT = require('passport-jwt').ExtractJwt;
+
+const { User } = require("../models");
 
 passport.use(
   'signup', new LocalStrategy({
-    username: "email",
-    password: "password",
+    usernameField: "email",
+    passwordField: "password",
     passReqToCallback: true
-  }, async (req, done) => {
+  }, async (req, email, password, done) => {
     try {
       const user = await User.create({
         ...req.body
@@ -26,8 +31,8 @@ passport.use(
 
 passport.use(
   "login", new LocalStrategy({
-    username: "email",
-    password: "password",
+    usernameField: "email",
+    passwordField: "password",
   }, async (email, password, done) => {
     try {
       const user = await User.findOne({email});
@@ -52,7 +57,22 @@ passport.use(
     } catch (error) {
       return done(error, {
         message: "Could not login, try again."
-      })
+      });
     }
   })
-)
+);
+
+passport.use(
+  new JWTStrategy (
+    {
+      secretOrKey: process.env.SECRET,
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
+    }, async (token, done) => {
+      try {
+        return done(null, token.user);
+      } catch (error) {
+        done(error);
+      }
+    }
+  )
+);

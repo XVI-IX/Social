@@ -9,6 +9,4 @@ class UnAuthenticatedError extends CustomError {
 }
 
 
-module.exports = {
-  UnAuthenticatedError,
-}
+module.exports = {UnAuthenticatedError}
