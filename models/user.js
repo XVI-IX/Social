@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { check } = require("../utils/verifyNumber");
+const crypto = require("crypto");
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -50,6 +51,19 @@ const UserSchema = new mongoose.Schema({
     //   },
     //   message: props => `${props.value} is not a valid phone number!`
     // }
+  },
+  created_at: {
+    type: Date,
+    default: new Date()
+  },
+  modified_at: {
+    type: Date,
+    default: new Date()
+  },
+  resetToken: {
+    type: String,
+    default: crypto.randomBytes(32).toString("hex"),
+    expires: 3600
   }
 });
 
@@ -77,5 +91,18 @@ UserSchema.methods.comparePassword = async function (password) {
     throw new Error("Please provide valid password");
   }
 }
+
+UserSchema.methods.getResetToken = async function () {
+
+  this.resetPasswordToken = crypto
+  .createHash("sha256")
+  .update(this.resetToken)
+  .digest("hex")
+
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+  return resetToken
+}
+
 
 module.exports = mongoose.model('users', UserSchema);

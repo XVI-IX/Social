@@ -1,8 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
-const { UnAuthenticatedError } = require("../error");
+const { UnAuthenticatedError, BadRequestError } = require("../error");
 const { User } = require("../models");
 
-const getInfo = async (req, res) => {
+const getProfile = async (req, res) => {
   const userId = req.session.userId;
 
   if (!userId){
@@ -10,7 +10,7 @@ const getInfo = async (req, res) => {
   }
 
   try {
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId).select("-password -resetPasswordToken");
 
     if (user) {
       return res.status( StatusCodes.OK ).json({
@@ -29,6 +29,44 @@ const getInfo = async (req, res) => {
   }
 }
 
+const updateProfile = async (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    throw new UnAuthenticatedError("Please, Log into your account")
+  }
+
+  const {
+    userName,
+    phoneNumber
+  } = req.body;
+
+  try {
+    await User.findOneAndUpdate({
+      _id: userId
+    }, {
+      username: userName,
+      phone_number: phoneNumber,
+      modified_at: new Date()
+    })
+
+    return res.status( StatusCodes.OK ).json({
+      message: "Profile Updated",
+      success: true
+    })
+  } catch (error) {
+    throw new BadRequestError("Please try again later.")
+  }
+}
+
+const changePassword = async (req, res) => {
+  const { email } = req.body;
+
+  
+}
+
+
 module.exports = {
-  getInfo,
+  getProfile,
+  updateProfile
 }
