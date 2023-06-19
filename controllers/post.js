@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { StatusCodes } = require("http-status-codes");
 const { UnAuthenticatedError, BadRequestError, ForbiddenError } = require("../error");
 const { User, Post } = require("../models");
@@ -24,7 +26,7 @@ const addPost = async (req, res) => {
   }
 }
 
-const getPost = async (req, res) => {
+const getPosts = async (req, res) => {
   const userId = req.session.userId;
 
   if (!userId) {
@@ -39,6 +41,36 @@ const getPost = async (req, res) => {
     if (!post) {
       return res.status( StatusCodes.NOT_FOUND ).json({
         message: `Post not found`,
+        success: false
+      })
+    }
+
+    return res.status( StatusCodes.OK ).json({
+      message: "Post found",
+      success: true,
+      post: post
+    })
+  } catch (error) {
+    throw new BadRequestError(error);
+  }
+}
+
+const getPost = async (req, res) => {
+  const postId = req.params.postId;
+  // const userId = req.session.userId;
+
+  // if (!userId) {
+  //   throw new UnAuthenticatedError("Please Log in")
+  // }
+
+  try {
+    const post = await Post.find({
+      _id: postId
+    })
+
+    if (!post) {
+      return res.status( StatusCodes.NOT_FOUND ).json({
+        message: "Post not found",
         success: false
       })
     }
@@ -104,9 +136,34 @@ const deletePost = async (req, res) => {
   }
 }
 
+const sharePost = async (req, res) => {
+  const postId = req.params.postId;
+
+  try {
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status( StatusCodes.NOT_FOUND ).json({
+        message: "Post not found",
+        success: false
+      })
+    }
+
+    return res.status( StatusCodes.OK ).json({
+      message: "Share link",
+      success: true,
+      link: `${process.env.URL}/posts/${postId}`
+    })
+  } catch (error) {
+    
+  }
+}
+
 module.exports = {
   addPost,
   getPost,
+  getPosts,
   editPost,
-  deletePost
+  deletePost,
+  sharePost
 }
