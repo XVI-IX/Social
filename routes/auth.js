@@ -6,29 +6,6 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { NotFoundError } = require("../error");
 
-// router.post("/signup", passport.authenticate(
-//   'signup', {session: false},
-//   (req, res, next) => {
-//     res.json({
-//       message: "signup successful",
-//       user: req.user
-//     })
-
-//     next();
-//   }
-// )(req, res, next));
-
-// router.post("/signup", (req, res) => {
-//   passport.authenticate(
-//     'signup', {session: false}),
-//     (req, res) => {
-//       res.json({
-//         message: "Signup Successful",
-//         user: req.user
-//       });
-//     }
-//   )
-// })
 
 router.post("/signup", passport.authenticate("signup", { session: false }), (req, res) => {
   res.json({

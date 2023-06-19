@@ -3,6 +3,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { check } = require("../utils/verifyNumber");
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -43,12 +44,12 @@ const UserSchema = new mongoose.Schema({
       /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/,
       "Please provide valid phone number ({country code}{number} or +{country code}{number})"
     ],
-    validate: {
-      validator: function(value) {
-        return check(value);
-      },
-      message: props => `${props.value} is not a valid phone number!`
-    }
+    // validate: {
+    //   validator: function(value) {
+    //     return check(value);
+    //   },
+    //   message: props => `${props.value} is not a valid phone number!`
+    // }
   }
 });
 
