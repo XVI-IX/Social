@@ -9,6 +9,7 @@ const passport = require('passport');
 require("./controllers/auth");
 
 const authRouter = require("./routes/auth");
+const userRouter = require("./routes/user");
 
 app.use(express.json());
 app.use(session({
@@ -26,7 +27,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Social");
 })
 
-app.use(authRouter)
+app.use(authRouter);
+app.use(userRouter);
 
 const start = async () => {
   await connectDB(process.env.MONGO_URI);

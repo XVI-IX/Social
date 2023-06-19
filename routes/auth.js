@@ -41,6 +41,7 @@ router.post("/login", async (req, res, next) => {
               email: user.email,
             }
             const token = jwt.sign({user: payload}, process.env.SECRET);
+            req.session.userId = user._id;
 
             return res.json({
               token
