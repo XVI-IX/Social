@@ -10,6 +10,7 @@ require("./controllers/auth");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const postRouter = require("./routes/post");
 
 app.use(express.json());
 app.use(session({
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 
 app.use(authRouter);
 app.use(userRouter);
+app.use(postRouter);
 
 const start = async () => {
   await connectDB(process.env.MONGO_URI);
