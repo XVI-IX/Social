@@ -5,6 +5,9 @@ const router = express.Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { NotFoundError } = require("../error");
+const {
+  forgotPassword
+} = require("../controllers/auth");
 
 
 router.post("/signup", passport.authenticate("signup", { session: false }), (req, res) => {
@@ -54,5 +57,7 @@ router.post("/login", async (req, res, next) => {
     }
   )(req, res, next);
 })
+
+router.post("/resetPassword", forgotPassword);
 
 module.exports = router;

@@ -4,8 +4,14 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const JWTStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+const bcrypt = require("bcryptjs");
+const {
+  BadRequestError
+} = require("../error");
 
-const { User } = require("../models");
+const crypto = require("crypto");
+
+const { User, Token } = require("../models");
 
 passport.use(
   'signup', new LocalStrategy({
@@ -76,3 +82,56 @@ passport.use(
     }
   )
 );
+
+const forgotPassword = async (req, res) => {
+  const { email } = req.body
+
+  try {
+    const user = await User.findOne({
+      email: email
+    });
+
+    if (!user) {
+      return res.status( StatusCode.NOT_FOUND ).json({
+        message: "User not found",
+        success: false
+      })
+    }
+
+    console.log(user);
+
+    let token = await Token.findOne({
+      user_id: user._id
+    });
+
+    if (token) {
+      await token.deleteOne()
+    }
+
+    let resetToken = await crypto.randomBytes(32).toString("hex");
+    const hash = await bcrypt.hash(resetToken, 10)
+
+    // Save new token to DB
+    token = await Token.create({
+      user_id: user._id,
+      token: hash,
+      created_at: Date.now()
+    })
+
+    const link = `localhost:3000/passwordReset?token=${resetToken}&id=${user._id}`;
+    // sendEmail(user.email, "Password Reset Request", {
+    //   name: user.name,
+    //   link: link
+    // })
+
+    console.log(link);
+    return link;
+  } catch (error) {
+    throw new BadRequestError("Please try again");
+  }
+}
+
+// const resetPassword = 
+module.exports = {
+  forgotPassword
+}

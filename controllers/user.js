@@ -59,13 +59,6 @@ const updateProfile = async (req, res) => {
   }
 }
 
-const changePassword = async (req, res) => {
-  const { email } = req.body;
-
-  
-}
-
-
 module.exports = {
   getProfile,
   updateProfile
