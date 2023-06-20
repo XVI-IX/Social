@@ -5,6 +5,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const JWTStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const bcrypt = require("bcryptjs");
+const { StatusCodes } = require("http-status-codes");
 const {
   BadRequestError
 } = require("../error");
@@ -12,6 +13,7 @@ const {
 const crypto = require("crypto");
 
 const { User, Token } = require("../models");
+const { send } = require("../utils")
 
 passport.use(
   'signup', new LocalStrategy({
@@ -98,8 +100,6 @@ const forgotPassword = async (req, res) => {
       })
     }
 
-    console.log(user);
-
     let token = await Token.findOne({
       user_id: user._id
     });
@@ -108,7 +108,7 @@ const forgotPassword = async (req, res) => {
       await token.deleteOne()
     }
 
-    let resetToken = await crypto.randomBytes(32).toString("hex");
+    let resetToken = crypto.randomBytes(32).toString("hex");
     const hash = await bcrypt.hash(resetToken, 10)
 
     // Save new token to DB
@@ -119,14 +119,41 @@ const forgotPassword = async (req, res) => {
     })
 
     const link = `localhost:3000/passwordReset?token=${resetToken}&id=${user._id}`;
-    // sendEmail(user.email, "Password Reset Request", {
-    //   name: user.name,
-    //   link: link
-    // })
+    const data = {
+      "from": process.env.EMAIL_USER,
+      "to": user.email,
+      "subject": "Password Reset",
+      "html": `\
+      <h5>Dear ${user.username},</h5>\
 
-    console.log(link);
-    return link;
+      <p>
+      Please find the password reset link <a href="http://${link}">here</a>.
+      <br>
+      If link provided above does not function, use this
+      <p>http://${link}</p>
+      </p>
+
+      <p>
+      <h5>Stay Safe</h5>
+      <h5>Social</h5>
+      </p>
+      
+      `
+    }
+
+    try {
+      const result = await send(data);
+      return res.status( StatusCodes.OK ).json({
+        message: "",
+        success: true,
+        result: result
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
   } catch (error) {
+    console.log(error);
     throw new BadRequestError("Please try again");
   }
 }
