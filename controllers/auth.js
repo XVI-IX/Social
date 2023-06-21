@@ -118,7 +118,7 @@ const forgotPassword = async (req, res) => {
       created_at: Date.now()
     })
 
-    const link = `localhost:3000/passwordReset?token=${resetToken}&id=${user._id}`;
+    const link = `localhost:3000/resetPassword?token=${resetToken}&id=${user._id}`;
     const data = {
       "from": process.env.EMAIL_USER,
       "to": user.email,
@@ -158,7 +158,71 @@ const forgotPassword = async (req, res) => {
   }
 }
 
-// const resetPassword = 
+const resetPassword = async (req, res) => {
+  const { password } = req.body;
+  const {
+    token, id
+  } = req.query;
+
+  // find token
+  const resetToken = await Token.findOne({user_id: id });
+
+  if (!resetToken) {
+    throw new Error("Invalid or Expired reset token")
+  }
+
+  // check if the tokens are equal
+  const valid = await bcrypt.compare(token, resetToken.token);
+  if (!valid) {
+    throw new Error("Invalid or expired reset token")
+  }
+
+  // hash new password
+  const hash = await bcrypt.hash(password, 10)
+
+  // update user data
+  await User.updateOne(
+    {_id: id},
+    {$set: {password: hash}},
+    {new: true}
+  )
+
+  const user = await User.findOne({_id: id});
+  const data = {
+    "from": process.env.EMAIL_USER,
+    "to": user.email,
+    "subject": "Password Reset Successfully",
+    "html": `\
+    <h5>Dear ${user.username},</h5>\
+
+    <p>
+    You have successfully reset your password.
+    </p>
+
+    <p>
+    <h5>Stay Safe, Social.</h5>
+    </p>
+    `
+  }
+
+  try {
+    // send email notifying user of reset
+    send(data);
+
+    // deleting reset token
+    await resetToken.deleteOne();
+
+    return res.status( StatusCodes.OK ).json({
+      message: "Password reset successful",
+      success: true
+    })
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+}
+
 module.exports = {
-  forgotPassword
+  forgotPassword,
+  resetPassword
 }

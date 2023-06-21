@@ -6,7 +6,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { NotFoundError } = require("../error");
 const {
-  forgotPassword
+  forgotPassword, resetPassword
 } = require("../controllers/auth");
 
 
@@ -58,6 +58,13 @@ router.post("/login", async (req, res, next) => {
   )(req, res, next);
 })
 
-router.post("/resetPassword", forgotPassword);
+router.post("/forgotPassword", forgotPassword);
+
+router.get("/resetPassword", async (req, res) => {
+  res.send("Use postman to change password");
+  
+});
+
+router.post("/resetPassword", resetPassword);
 
 module.exports = router;
