@@ -24,6 +24,10 @@ const PostSchema = new mongoose.Schema({
   modified_at: {
   type: Date,
   default: new Date(),
+  },
+  likes: {
+    type: Number,
+    default: 0
   }
 })
 

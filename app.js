@@ -11,6 +11,7 @@ require("./controllers/auth");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
+const commentRouter = require("./routes/comment");
 
 app.use(express.json());
 app.use(session({
@@ -25,12 +26,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the Social");
+  res.send("Welcome to Social");
 })
 
 app.use(authRouter);
 app.use(userRouter);
 app.use(postRouter);
+app.use(commentRouter);
 
 const start = async () => {
   await connectDB(process.env.MONGO_URI);

@@ -159,11 +159,52 @@ const sharePost = async (req, res) => {
   }
 }
 
+const likePost = async (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    throw new UnAuthenticatedError("Please log in!")
+  }
+
+  try {
+    const post = await Post.findById(req.params.postId);
+
+    if (!post) {
+      return res.status( StatusCodes.NOT_FOUND ).json({
+        message: "Post not found",
+        success: false
+      })
+    }
+
+    try {
+      await Post.findOneAndUpdate({
+        _id: req.params.postId
+      }, {
+        $inc: {likes: 1}
+      });
+
+      const likes = await Post.findById(req.params.postId)
+                              .select('likes');
+
+      return res.status( StatusCodes.OK ).json({
+        message: " Liked successfully",
+        success: true,
+        likes: likes
+      })
+    } catch (error) {
+      throw new BadRequestError("Like could not be updated, try again later");
+    }
+  } catch (error) {
+    throw new BadRequestError("Please try again");
+  }
+}
+
 module.exports = {
   addPost,
   getPost,
   getPosts,
   editPost,
   deletePost,
-  sharePost
+  sharePost,
+  likePost,
 }
