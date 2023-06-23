@@ -176,15 +176,25 @@ const likePost = async (req, res) => {
       })
     }
 
+    if (post.likedBy.includes(userId)) {
+      return res.status( StatusCodes.OK ).json({
+        message: "You have liked this post already",
+        success: true
+      })
+    }
+
     try {
       await Post.findOneAndUpdate({
         _id: req.params.postId
       }, {
-        $inc: {likes: 1}
+        $inc: {likes: 1},
+        $addToSet: {likedBy: userId}
       });
 
+      post.likedBy.push(userId);
+
       const likes = await Post.findById(req.params.postId)
-                              .select('likes');
+                              .select('likes likedBy');
 
       return res.status( StatusCodes.OK ).json({
         message: " Liked successfully",

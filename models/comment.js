@@ -40,6 +40,9 @@ const CommentSchema = new mongoose.Schema({
   modified_at: {
     type: Date,
     default: new Date()
+  },
+  likedBy: {
+    type: [String]
   }
 })
 

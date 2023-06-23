@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Comment } = require('../models');
 const { StatusCodes } = require("http-status-codes");
 const { 
+  BadRequestError,
   UnAuthenticatedError,
   ForbiddenError
  } = require("../error");
@@ -133,18 +134,29 @@ const likeComment = async (req, res) => {
       })
     }
 
+    if (comment.likedBy.includes(userId)) {
+      return res.status( StatusCodes.OK ).json({
+        message: "You have liked this comment already",
+        success: true
+      })
+    }
+
     await Comment.findOneAndUpdate(
       {_id: commentId},
-      {$inc: {likes: 1}}
+      {
+        $inc: {likes: 1},
+        $addToSet: {likedBy: userId}
+      }
       )
 
+
     const likes = await Comment.findById(commentId)
-                                .select("likes");
+                                .select("likes likedBy");
 
     return res.status( StatusCodes.OK ).json({
       message: "Like successful",
       success: true,
-      likes: likes
+      likes: likes,
     })
   } catch (error) {
     throw new BadRequestError(error.message);
