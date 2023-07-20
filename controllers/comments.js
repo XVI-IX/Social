@@ -162,6 +162,7 @@ const likeComment = async (req, res) => {
     throw new BadRequestError(error.message);
   }
 }
+
 module.exports = {
   postComment,
   replyComment,

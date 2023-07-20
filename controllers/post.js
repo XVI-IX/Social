@@ -7,10 +7,6 @@ const { User, Post } = require("../models");
 const addPost = async (req, res) => {
   const userId = req.session.userId;
 
-  if (!userId) {
-    throw new UnAuthenticatedError("Please log into your account");
-  }
-
   const postBody = req.body;
 
   try {
@@ -28,10 +24,6 @@ const addPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
   const userId = req.session.userId;
-
-  if (!userId) {
-    throw new UnAuthenticatedError("Please log in")
-  }
 
   try {
     const post = await Post.find({
@@ -57,11 +49,7 @@ const getPosts = async (req, res) => {
 
 const getPost = async (req, res) => {
   const postId = req.params.postId;
-  // const userId = req.session.userId;
-
-  // if (!userId) {
-  //   throw new UnAuthenticatedError("Please Log in")
-  // }
+  const userId = req.session.userId;
 
   try {
     const post = await Post.find({
@@ -93,10 +81,6 @@ const editPost = async (req, res) => {
     content
   } = req.body;
 
-  if (!userId) {
-    throw new UnAuthenticatedError("Please log in")
-  }
-
   try {
     const post = await Post.findOneAndUpdate({
       user_id: userId,
@@ -119,10 +103,6 @@ const editPost = async (req, res) => {
 const deletePost = async (req, res) => {
   const postId = req.params.postId;
   const userId = req.session.userId;
-
-  if (!userId) {
-    throw new UnAuthenticatedError("Please log in");
-  }
 
   try {
     await Post.findByIdAndDelete(postId);
@@ -161,10 +141,6 @@ const sharePost = async (req, res) => {
 
 const likePost = async (req, res) => {
   const userId = req.session.userId;
-
-  if (!userId) {
-    throw new UnAuthenticatedError("Please log in!")
-  }
 
   try {
     const post = await Post.findById(req.params.postId);

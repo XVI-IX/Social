@@ -65,6 +65,8 @@ const UserSchema = new mongoose.Schema({
     default: crypto.randomBytes(32).toString("hex"),
     expires: 3600
   }
+}, {
+  timestamp: true,
 });
 
 UserSchema.pre('save', async function() {

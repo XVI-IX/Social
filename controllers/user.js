@@ -5,10 +5,6 @@ const { User } = require("../models");
 const getProfile = async (req, res) => {
   const userId = req.session.userId;
 
-  if (!userId){
-    throw new UnAuthenticatedError("Please log into your account!!");
-  }
-
   try {
     const user = await User.findById(userId).select("-password -resetPasswordToken");
 
@@ -31,10 +27,6 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   const userId = req.session.userId;
-
-  if (!userId) {
-    throw new UnAuthenticatedError("Please, Log into your account")
-  }
 
   const {
     userName,

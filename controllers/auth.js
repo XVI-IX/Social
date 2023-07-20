@@ -15,6 +15,8 @@ const crypto = require("crypto");
 const { User, Token } = require("../models");
 const { send } = require("../utils")
 
+const emailQueue = require("../utils/sendEmailQueue");
+
 passport.use(
   'signup', new LocalStrategy({
     usernameField: "email",
@@ -142,11 +144,12 @@ const forgotPassword = async (req, res) => {
     }
 
     try {
-      const result = await send(data);
+      // const result = await send(data);
+      emailQueue.add(data)
       return res.status( StatusCodes.OK ).json({
         message: "",
         success: true,
-        result: result
+        // result: result
       })
     } catch (error) {
       console.log(error)
