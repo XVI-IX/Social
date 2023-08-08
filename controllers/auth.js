@@ -145,7 +145,7 @@ const forgotPassword = async (req, res) => {
 
     try {
       // const result = await send(data);
-      emailQueue.add(data)
+      emailQueue(data);
       return res.status( StatusCodes.OK ).json({
         message: "",
         success: true,
