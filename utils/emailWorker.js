@@ -17,14 +17,19 @@ amqp.connect("amqp://localhost", (error0, connection) => {
       durable: false
     });
 
-    channel.prefetch(1);
+    // channel.prefetch(1);
     console.log("[x] Waiting for emails in %s. To exit press CTRL + C", queue);
 
     channel.consume(queue, (msg) => {
-      send(JSON.parse(msg));
-      console.log("[x] Sent mail to %s", msg.to);
+      let data = msg.content.toString();
+      console.log(data);
+      data = JSON.parse(data);
+
+      console.log(typeof(data));
+      send(data);
+      console.log("[x] Sent mail to %s", data.to);
     }, {
-      noAck: false
+      noAck: true
     })
   })
-})
+});

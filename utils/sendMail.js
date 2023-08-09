@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 const config =  {
   service: process.env.SERVICE,
   host: process.env.HOST,
-  port: process.env.MAIL_PORT,
+  port: process.env.PORT,
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,

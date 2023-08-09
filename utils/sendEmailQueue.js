@@ -21,14 +21,16 @@ const emailQueue = (data) => {
       durable: false
     });
 
+    // console.log(data);
+    // console.log(msg);
     channel.sendToQueue(queue, Buffer.from(msg));
 
-    console.log("[x] Sent email for % to queue", data.to);
+    console.log("[x] Sent email for %s to queue", data.to);
   });
 
   setTimeout(() => {
     connection.close();
-    process.exit(0);
+    // process.exit(0);
   }, 500);
 });
 }
