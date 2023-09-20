@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const nodemailer = require('nodemailer');
 const amqp = require('amqplib/callback_api');
 
 const emailQueue = (data) => {
@@ -30,7 +29,6 @@ const emailQueue = (data) => {
 
   setTimeout(() => {
     connection.close();
-    // process.exit(0);
   }, 500);
 });
 }

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const amqp = require("amqplib/callback_api");
 const { send } = require("../utils/sendMail");
 
@@ -22,10 +24,10 @@ amqp.connect("amqp://localhost", (error0, connection) => {
 
     channel.consume(queue, (msg) => {
       let data = msg.content.toString();
-      console.log(data);
+      // console.log(data);
       data = JSON.parse(data);
 
-      console.log(typeof(data));
+      // console.log(typeof(data));
       send(data);
       console.log("[x] Sent mail to %s", data.to);
     }, {

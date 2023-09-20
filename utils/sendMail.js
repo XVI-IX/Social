@@ -1,19 +1,25 @@
-require("dotenv").config();
+require("dotenv").config({ path: "../.env"});
 const nodemailer = require("nodemailer");
 
 const config =  {
-  service: process.env.SERVICE,
+  // service: process.env.SERVICE,
   host: process.env.HOST,
-  port: process.env.PORT,
+  port: process.env.MAIL_PORT,
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.PASS
+  },
+  // Only for development
+  tls: {
+    rejectUnauthorized: true
   }
 };
 
 const send = (data) => {
   const transporter = nodemailer.createTransport(config);
+
+  console.log(process.env.EMAIL_USER);
   transporter.verify((error, success) => {
     if (error) {
       console.log(error);
