@@ -1,40 +1,36 @@
 require('dotenv').config();
 
-const Queue = require('bull');
-const nodemailer = require('nodemailer');
+const amqp = require('amqplib/callback_api');
 
-//Bull.js queue instance
-const emailQueue = new Queue('sendEmail');
-
-// configuration for mail transporter
-const config =  {
-  service: process.env.SERVICE,
-  host: process.env.HOST,
-  port: process.env.MAIL_PORT,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.PASS
+const emailQueue = (data) => {
+  amqp.connect("amqp://localhost", (error0, connection) => {
+  if (error0) {
+    throw error0;
   }
-};
 
-// Create Nodemailer Transporter
-const transporter = nodemailer.createTransport(config);
+  connection.createChannel((error1, channel) => {
+    if (error1) {
+      throw error1;
+    }
 
-emailQueue.process(async (job) => {
-  const { email, subject, html } = job.data;
+    let queue = "emailQueue";
+    let msg = JSON.stringify(data);
 
-  // Send mail
-  await transporter.sendMail({
-    from: 'oladoja14@gmail.com',
-    to: email,
-    subject: subject,
-    html: html
+    channel.assertQueue(queue, {
+      durable: false
+    });
+
+    // console.log(data);
+    // console.log(msg);
+    channel.sendToQueue(queue, Buffer.from(msg));
+
+    console.log("[x] Sent email for %s to queue", data.to);
   });
 
-  // Optional return
-  return { status: 'Email sent successfully'};
+  setTimeout(() => {
+    connection.close();
+  }, 500);
 });
-
+}
 
 module.exports = emailQueue;

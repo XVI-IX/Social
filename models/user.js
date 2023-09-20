@@ -52,14 +52,6 @@ const UserSchema = new mongoose.Schema({
     //   message: props => `${props.value} is not a valid phone number!`
     // }
   },
-  created_at: {
-    type: Date,
-    default: new Date()
-  },
-  modified_at: {
-    type: Date,
-    default: new Date()
-  },
   resetToken: {
     type: String,
     default: crypto.randomBytes(32).toString("hex"),

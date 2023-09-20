@@ -40,8 +40,8 @@ app.use(commentRouter);
 
 const start = async () => {
   await connectDB(process.env.MONGO_URI);
-  app.listen(8080, () => {
-    console.log("App is listening on port 8080...");
+  app.listen(3000, () => {
+    console.log("App is listening on port 3000...");
   })
 }
 

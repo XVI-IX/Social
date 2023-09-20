@@ -96,7 +96,7 @@ const forgotPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status( StatusCode.NOT_FOUND ).json({
+      return res.status( StatusCodes.NOT_FOUND ).json({
         message: "User not found",
         success: false
       })
@@ -122,10 +122,10 @@ const forgotPassword = async (req, res) => {
 
     const link = `localhost:3000/resetPassword?token=${resetToken}&id=${user._id}`;
     const data = {
-      "from": process.env.EMAIL_USER,
-      "to": user.email,
-      "subject": "Password Reset",
-      "html": `\
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: "Password Reset",
+      html: `\
       <h5>Dear ${user.username},</h5>\
 
       <p>
@@ -145,7 +145,7 @@ const forgotPassword = async (req, res) => {
 
     try {
       // const result = await send(data);
-      emailQueue.add(data)
+      emailQueue(data);
       return res.status( StatusCodes.OK ).json({
         message: "",
         success: true,
