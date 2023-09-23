@@ -16,9 +16,14 @@ const commentRouter = require("./routes/comment");
 
 // Middleware
 const authMiddleware = require("./middleware/auth");
-const upload = require("./utils/upload");
+
+const {
+  uploadImage,
+  getImageInfo
+} = require("./utils/cloudinary");
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: process.env.SECRET,
   cookie: {
@@ -34,13 +39,23 @@ app.get("/", (req, res) => {
   res.send("Welcome to Social");
 });
 
-app.post("/upload", upload.single("image"), (req, res) => {
-  if (req.file) {
-    return res.send("Single file uploaded successfully");
-  }
+// app.post("/upload", upload.single("image"), async (req, res) => {
+//   if (req.file) {
+//     console.log(req.file);
 
-  return res.status(400).send("Please upload a valid image");
-})
+//     const result = await uploadImage(req.file.path);
+
+//     const imageInfo = await getImageInfo(result);
+
+//     console.log(imageInfo.secure_url);
+
+//     // console.log(result);
+
+//     return res.send("Single file uploaded successfully");
+//   }
+
+//   return res.status(400).send("Please upload a valid image");
+// })
 
 app.use(authRouter);
 app.use(authMiddleware, userRouter);

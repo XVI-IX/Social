@@ -2,7 +2,7 @@ const multer = require("multer");
 const path = require("path");
 
 const storageEngine = multer.diskStorage({
-  destination: "../public/images",
+  destination: "public/images",
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-- ${file.originalname}`);
   }
@@ -15,20 +15,14 @@ const checkFileType = (file, cb) => {
 
   // Check extensions
   const extType = fileTypes.test(path.extname(file.originalname).toLowerCase());
-  // const mimeType = fileTypes.test(file.mimeType);
+  
+  if (extType) {
+    return cb(null, true);
+  }
 
-  console.log(file.mimeType);
+  return cb("Error: You can only upload images.")
 
-  // console.log(extType, mimeType);
-
-
-  // if (mimeType && extType) {
-  //   return cb(null, true);
-  // }
-
-  // return cb("Error: You can only upload images.")
-
-  return cb(null, true);
+  // return cb(null, true);
 }
 
 const upload = multer({

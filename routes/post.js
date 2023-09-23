@@ -6,8 +6,9 @@ const {
   sharePost, getPost,
   likePost
 } = require("../controllers/post");
+const upload = require("../utils/upload");
 
-router.post("/posts", addPost);
+router.post("/posts", upload.single("image"), addPost);
 
 router.get("/posts", getPosts);
 router.get("/posts/:postId", getPost)

@@ -17,14 +17,6 @@ const PostSchema = new mongoose.Schema({
   img_url: {
     type: String
   },
-  created_at: {
-    type: Date,
-    default: new Date()
-  },
-  modified_at: {
-  type: Date,
-  default: new Date(),
-  },
   likes: {
     type: Number,
     default: 0
@@ -32,7 +24,9 @@ const PostSchema = new mongoose.Schema({
   likedBy: {
     type: [String]
   }
-})
+}, {
+  timestamps: true
+});
 
 
 module.exports = mongoose.model("posts", PostSchema);

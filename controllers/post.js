@@ -3,14 +3,26 @@ require("dotenv").config();
 const { StatusCodes } = require("http-status-codes");
 const { UnAuthenticatedError, BadRequestError, ForbiddenError } = require("../error");
 const { User, Post } = require("../models");
+const { uploadUtil } = require("../utils/cloudinary");
 
 const addPost = async (req, res) => {
   const userId = req.session.userId;
 
-  const postBody = req.body;
+
+  if (req.file) {
+    try {
+      const imageUrl = await uploadUtil(req.file.path);
+
+      req.body.img_url = imageUrl;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  req.body.user_id = userId;
 
   try {
-    const newPost = await Post.create(postBody)
+    const newPost = await Post.create(req.body);
 
     return res.status( StatusCodes.OK ).json({
       message: "Post Successful",
