@@ -16,6 +16,7 @@ const commentRouter = require("./routes/comment");
 
 // Middleware
 const authMiddleware = require("./middleware/auth");
+const upload = require("./utils/upload");
 
 app.use(express.json());
 app.use(session({
@@ -32,6 +33,14 @@ app.use(passport.session());
 app.get("/", (req, res) => {
   res.send("Welcome to Social");
 });
+
+app.post("/upload", upload.single("image"), (req, res) => {
+  if (req.file) {
+    return res.send("Single file uploaded successfully");
+  }
+
+  return res.status(400).send("Please upload a valid image");
+})
 
 app.use(authRouter);
 app.use(authMiddleware, userRouter);
