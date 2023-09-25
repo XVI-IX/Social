@@ -1,0 +1,425 @@
+{
+	"info": {
+		"_postman_id": "545a9471-48d1-4e8c-8c23-f887b3b2fe64",
+		"name": "Social",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21588593"
+	},
+	"item": [
+		{
+			"name": "GET Home Page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"nabardd\",\r\n    \"first_name\":\"David-Daniel\",\r\n    \"last_name\":\"Ojebiyi\",\r\n    \"other_name\":\"Oluwaponmile\",\r\n    \"email\":\"oladoja14@gmail.com\",\r\n    \"password\":\"VictoryMonkey0*\",\r\n    \"phone_number\":\"+2349036213522\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"oladoja14@gmail.com\",\r\n    \"password\": \"VictoryMonkey0*\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forgot Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"oladoja14@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/forgotPassword",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forgotPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\": \"quest4m$re\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/resetPassword?token=916812c3e91b7c7495825d8540a5f4067f47d22773bf8f531abe81632a217baf&id=651164c03f0d33c6973072f2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"resetPassword"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "916812c3e91b7c7495825d8540a5f4067f47d22773bf8f531abe81632a217baf"
+						},
+						{
+							"key": "id",
+							"value": "651164c03f0d33c6973072f2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/David-Daniel/Pictures/WhatsApp Image 2023-08-18 at 08.01.14.jpg",
+							"disabled": true
+						},
+						{
+							"key": "content",
+							"value": "This is a post that has been created for the sole purpose of deletion.",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/post",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/profile",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Comment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"This will be deleted later.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/comment/651171cf0ffbb5f0830ac106",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"comment",
+						"651171cf0ffbb5f0830ac106"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reply Comment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"Well, I hope it doesn't\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/comment/reply/6511794fca0d224b65834bd2",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"comment",
+						"reply",
+						"6511794fca0d224b65834bd2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Comment replies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/comment/651174e42c52c52ba675c105",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"comment",
+						"651174e42c52c52ba675c105"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like Comment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/comment/651174e42c52c52ba675c105/like",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"comment",
+						"651174e42c52c52ba675c105",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Comment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/comment/65117d1076ad5ab8faa68054",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"comment",
+						"65117d1076ad5ab8faa68054"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all user's posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/post",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a post",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/post/651171cf0ffbb5f0830ac106",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"post",
+						"651171cf0ffbb5f0830ac106"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Share post",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/post/651171cf0ffbb5f0830ac106/share",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"post",
+						"651171cf0ffbb5f0830ac106",
+						"share"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like Post",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/post/651171cf0ffbb5f0830ac106/like",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"post",
+						"651171cf0ffbb5f0830ac106",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Post",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"well, I thought I'd change up the content a little bit\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/post/651171cf0ffbb5f0830ac106",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"post",
+						"651171cf0ffbb5f0830ac106"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Post",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/post/65118e5eb7f6d76cd3dace85",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"post",
+						"65118e5eb7f6d76cd3dace85"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
