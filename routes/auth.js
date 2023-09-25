@@ -12,8 +12,10 @@ const {
 
 router.post("/signup", passport.authenticate("signup", { session: false }), (req, res) => {
   res.json({
-    message: "Sigup successful",
-    user: req.user
+    message: "Signup successful",
+    success: true,
+    username: req.user.username,
+    status: 201
   });
 })
 
@@ -47,7 +49,9 @@ router.post("/login", async (req, res, next) => {
             req.session.userId = user._id;
 
             return res.json({
-              token
+              message: "Login successful",
+              status: 200,
+              success: true
             });
           }
         )

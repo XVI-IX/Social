@@ -144,12 +144,10 @@ const forgotPassword = async (req, res) => {
     }
 
     try {
-      // const result = await send(data);
       emailQueue(data);
       return res.status( StatusCodes.OK ).json({
-        message: "",
+        message: "Reset token sent successfully",
         success: true,
-        // result: result
       })
     } catch (error) {
       console.log(error)
