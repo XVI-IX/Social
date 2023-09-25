@@ -52,7 +52,8 @@ const getPosts = async (req, res) => {
     return res.status( StatusCodes.OK ).json({
       message: "Post found",
       success: true,
-      post: post
+      post: post,
+      number_of_posts: post.length,
     })
   } catch (error) {
     throw new BadRequestError(error);
@@ -61,7 +62,7 @@ const getPosts = async (req, res) => {
 
 const getPost = async (req, res) => {
   const postId = req.params.postId;
-  const userId = req.session.userId;
+  // const userId = req.session.userId;
 
   try {
     const post = await Post.find({
@@ -99,7 +100,8 @@ const editPost = async (req, res) => {
       _id: postId
     }, {
       content: content,
-      modified_at: new Date()
+    }, {
+      new: true,
     });
 
     return res.status( StatusCodes.OK ).json({
@@ -116,14 +118,23 @@ const deletePost = async (req, res) => {
   const postId = req.params.postId;
   const userId = req.session.userId;
 
+  if (!userId) {
+    res.status( StatusCodes.FORBIDDEN ).json({
+      message: "You are not logged in."
+    })
+    throw new ForbiddenError("Please log in.");
+  }
+
   try {
     await Post.findByIdAndDelete(postId);
 
     return res.status( StatusCodes.OK ).json({
       message: "Post deleted",
-      success: true
+      success: true,
+      status: StatusCodes.OK
     })
   } catch (error) {
+    console.error(error);
     throw new BadRequestError(error);
   }
 }
