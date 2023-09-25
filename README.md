@@ -20,3 +20,32 @@ The project is divided into:
 
 ## Getting Started
 
+### 🧰 Tech Stack
+
+* Node.js
+
+* Express
+
+* MongoDB
+
+### 📒 Requirements
+
+This project requires nodeJS version >= 14 and its corresponding npm package manager.
+
+### 💻 Running Locally
+
+1. Clone this repository by running the command below in your terminal:
+
+```bash
+https://github.com/XVI-IX/social.git
+```
+
+2. Install the dependencies:
+
+```bash
+npm install
+```
+
+3. Using the .env_sample template, create a .env file and fill it with the environment variables.
+
+4. 
