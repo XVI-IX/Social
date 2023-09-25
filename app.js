@@ -39,24 +39,6 @@ app.get("/", (req, res) => {
   res.send("Welcome to Social");
 });
 
-// app.post("/upload", upload.single("image"), async (req, res) => {
-//   if (req.file) {
-//     console.log(req.file);
-
-//     const result = await uploadImage(req.file.path);
-
-//     const imageInfo = await getImageInfo(result);
-
-//     console.log(imageInfo.secure_url);
-
-//     // console.log(result);
-
-//     return res.send("Single file uploaded successfully");
-//   }
-
-//   return res.status(400).send("Please upload a valid image");
-// })
-
 app.use(authRouter);
 app.use(authMiddleware, userRouter);
 app.use(authMiddleware, postRouter);

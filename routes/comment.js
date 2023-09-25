@@ -7,8 +7,8 @@ const {
   getReplies, likeComment
 } = require("../controllers/comments");
 
-router.post("/comment", postComment);
-router.post("/comment/:commentId", replyComment);
+router.post("/comment/:postId", postComment);
+router.post("/comment/reply/:commentId", replyComment);
 router.get("/comment/:commentId", getReplies)
 router.get("/comment/:commentId/like", likeComment);
 router.delete("/comment/:commentId", deleteComment);

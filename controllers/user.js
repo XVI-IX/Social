@@ -6,7 +6,7 @@ const getProfile = async (req, res) => {
   const userId = req.session.userId;
 
   try {
-    const user = await User.findById(userId).select("-password -resetPasswordToken");
+    const user = await User.findById(userId).select("-password -resetPasswordToken -resetToken");
 
     if (user) {
       return res.status( StatusCodes.OK ).json({
@@ -39,7 +39,6 @@ const updateProfile = async (req, res) => {
     }, {
       username: userName,
       phone_number: phoneNumber,
-      modified_at: new Date()
     })
 
     return res.status( StatusCodes.OK ).json({

@@ -15,7 +15,9 @@ const postComment = async (req, res) => {
   }
 
   const commentBody = req.body;
+  commentBody['post_id'] = req.params.postId;
   commentBody['user_id'] = userId;
+
 
   try {
     const newComment = await Comment.create(commentBody)
@@ -26,13 +28,14 @@ const postComment = async (req, res) => {
       comment: newComment
     })
   } catch (error) {
+    console.error(error);
     throw new BadRequestError("Comment not posted, try again");
   }
 
 }
 
 const replyComment = async (req, res) => {
-  const commentId = req.params.commentId
+  const commentId = req.params.commentId;
   const userId = req.session.userId;
 
   if (!userId) {
@@ -43,13 +46,13 @@ const replyComment = async (req, res) => {
     const comment = await Comment.findById(commentId);
 
     if (!comment) {
-      return res.status( StatusCode.OK ).json({
+      return res.status( StatusCodes.OK ).json({
         message: "Comment could not be found",
         success: false
       })
     }
 
-    req.body['commentId'] = commentId;
+    req.body['comment_id'] = commentId;
 
     const newComment = await Comment.create(req.body)
 
@@ -59,6 +62,7 @@ const replyComment = async (req, res) => {
       comment: newComment
     })
   } catch (error) {
+    console.error(error)
     throw new BadRequestError("Please try again");
   }
 }
@@ -67,7 +71,7 @@ const deleteComment = async (req, res) => {
   const commentId = req.params.commentId;
   const userId = req.session.userId;
 
-  if (!user) {
+  if (!userId) {
     throw new UnAuthenticatedError("Please log in")
   }
 
@@ -85,9 +89,18 @@ const deleteComment = async (req, res) => {
       user_id: userId
     });
 
-    return res.status( StatusCodes.DEL)
+    return res.status( StatusCodes.OK ).json({
+      message: "Comment deleted",
+      success: true,
+      status: StatusCodes.OK
+    })
   } catch (error) {
-    
+    console.error(error);
+    return res.status( StatusCodes.INTERNAL_SERVER_ERROR ).json({
+      message: "Internal Server Error",
+      success: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR
+    });
   }
 }
 

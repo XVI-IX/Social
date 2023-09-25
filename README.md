@@ -172,3 +172,105 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
+* **GET** `/api/profile`
+
+* Endpoint to get logged in user's profile. It gets the user's ID from the session.
+
+* Arguments: Accepts no arguments from the user.
+
+* Returns: JSON object containing the user's profile information.
+
+```json
+{
+    "message": "User info query successful",
+    "success": true,
+    "data": {
+        "_id": "651164c03f0d33c6973072f2",
+        "username": "nabardd",
+        "first_name": "David-Daniel",
+        "last_name": "Ojebiyi",
+        "other_name": "Oluwaponmile",
+        "email": "oladoja14@gmail.com",
+        "phone_number": "+2348187058736",
+        "__v": 0
+    }
+}
+```
+
+* Sample Request: ``
+
+* **PATCH** `/api/profile`
+
+* Endpoint for authenticated user to edit profile.
+
+* Arguments: Accepts fields to be edited as JSON object.
+
+```json
+
+```
+
+* Returns:
+
+* Sample Request: ``
+
+* **POST** `/api/comment/:post_id`
+
+* Endpoint for authenticated user to make a comment on a post.
+
+* Arguments: Takes the user ID from the session and the post ID from the route parameters, and the content for the comment from the JSON body passed.
+
+```JSON
+{
+    "content": "Hope this works"
+}
+```
+
+* Returns: Response showing success or failure.
+
+```json
+{
+    "message": "Comment successful",
+    "success": true,
+    "comment": {
+        "post_id": "651171cf0ffbb5f0830ac106",
+        "user_id": "651164c03f0d33c6973072f2",
+        "content": "Hope this works",
+        "likes": 0,
+        "likedBy": [],
+        "_id": "651174e42c52c52ba675c105",
+        "createdAt": "2023-09-25T11:54:12.223Z",
+        "updatedAt": "2023-09-25T11:54:12.223Z",
+        "__v": 0
+    }
+}
+```
+
+* Sample request: ``
+
+* **POST** `/api/comment/reply/:commentId`
+
+* Endpoint that add a reply to a comment in the means of a comment to a comment.
+
+* Arguments: Takes the user ID from the session and adds a reply (comment) to a comment using the comment ID
+
+```json
+
+```
+
+* **DELETE** `api/comment/:commentId`
+
+* Endpoint to delete a comment from database.
+
+* Arguments: Takes the user ID from the session and the comment ID from the route and deletes the comment.
+
+* Returns: JSON object showing success or failure.
+
+```json
+{
+    "message": "Comment deleted",
+    "success": true,
+    "status": 200
+}
+```
+
+* Sample request: ``

@@ -5,6 +5,7 @@ require("dotenv").config();
 const CommentSchema = new mongoose.Schema({
   post_id: {
     type: String,
+    // required: true,
     desc: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'posts'
@@ -33,17 +34,11 @@ const CommentSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  created_at: {
-    type: Date,
-    default: new Date()
-  },
-  modified_at: {
-    type: Date,
-    default: new Date()
-  },
   likedBy: {
     type: [String]
   }
+}, {
+  timestamps: true
 })
 
 
