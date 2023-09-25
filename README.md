@@ -59,7 +59,7 @@ npm start
 
 The **Social** app provides the following endpoints:
 
-* **POST** `/api/signup`
+**POST** `/api/signup`
 
 * Endpoint to signup as a user on social.
 
@@ -104,7 +104,7 @@ The **Social** app provides the following endpoints:
 
 * Sample Request: ``
 
-* **POST** `/api/login`
+**POST** `/api/login`
 
 * Endpoint to login as a user.
 
@@ -134,7 +134,7 @@ The **Social** app provides the following endpoints:
 * Sample Request: ``
 
 
-* **POST** `/api/forgotPassword`
+**POST** `/api/forgotPassword`
 
 * Endpoint to send password reset token to users email address. This uses a queue to process requests to the email host.
 
@@ -157,7 +157,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **POST** `/api/resetPassword?token=TOKEN&id=ID`
+**POST** `/api/resetPassword?token=TOKEN&id=ID`
 
 * Endpoint to send new password to database.
 
@@ -172,7 +172,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **GET** `/api/profile`
+**GET** `/api/profile`
 
 * Endpoint to get logged in user's profile. It gets the user's ID from the session.
 
@@ -199,7 +199,7 @@ The **Social** app provides the following endpoints:
 
 * Sample Request: ``
 
-* **PATCH** `/api/profile`
+**PATCH** `/api/profile`
 
 * Endpoint for authenticated user to edit profile.
 
@@ -213,7 +213,7 @@ The **Social** app provides the following endpoints:
 
 * Sample Request: ``
 
-* **POST** `/api/comment/:post_id`
+**POST** `/api/comment/:post_id`
 
 * Endpoint for authenticated user to make a comment on a post.
 
@@ -247,7 +247,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **POST** `/api/comment/reply/:commentId`
+**POST** `/api/comment/reply/:commentId`
 
 * Endpoint that add a reply to a comment in the means of a comment to a comment.
 
@@ -257,7 +257,7 @@ The **Social** app provides the following endpoints:
 
 ```
 
-* **DELETE** `api/comment/:commentId`
+**DELETE** `api/comment/:commentId`
 
 * Endpoint to delete a comment from database.
 
@@ -275,7 +275,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **POST** `/api/post`
+**POST** `/api/post`
 
 * Endpoint for authenticated user to make a post.
 
@@ -309,7 +309,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **GET** `/api/post`
+**GET** `/api/post`
 
 * Endpoint to get all posts made by authenticated user.
 
@@ -352,7 +352,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **GET** `/api/post/:postId`
+**GET** `/api/post/:postId`
 
 * Endpoint to get a particular post.
 
@@ -382,7 +382,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **GET** `/api/post/:postId/share`
+**GET** `/api/post/:postId/share`
 
 * Endpoint for an authenticated user to share a post.
 
@@ -400,7 +400,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **GET** `/api/post/:postId/like`
+**GET** `/api/post/:postId/like`
 
 * Endpoint to like a post
 
@@ -424,7 +424,7 @@ The **Social** app provides the following endpoints:
 
 * Sample request: ``
 
-* **PATCH** `/api/post/:postId`
+**PATCH** `/api/post/:postId`
 
 * Endpoint to edit a post.
 
@@ -460,7 +460,7 @@ Returns: a JSON object showing changes made to the post content.
 
 * Sample request: ``
 
-* **DELETE** `/api/post/:postId`
+**DELETE** `/api/post/:postId`
 
 * Endpoint to delete a post
 
