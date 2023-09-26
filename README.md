@@ -137,6 +137,7 @@ The **Social** app provides the following endpoints:
 **POST** `/api/forgotPassword`
 
 * Endpoint to send password reset token to users email address. This uses a queue to process requests to the email host.
+To run the queue locally, in a seperate terminal window, navigate to the `utils` folder and run `node run emailWorker.js`
 
 * Arguments: accepts the users email address
 
