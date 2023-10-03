@@ -6,18 +6,20 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { NotFoundError } = require("../error");
 const {
+  signup,
   forgotPassword, resetPassword
 } = require("../controllers/auth");
 
 
-router.post("/signup", passport.authenticate("signup", { session: false }), (req, res) => {
-  res.json({
-    message: "Signup successful",
-    success: true,
-    username: req.user.username,
-    status: 201
-  });
-})
+// router.post("/signup", passport.authenticate("signup", { session: false }), (req, res) => {
+//   res.json({
+//     message: "Signup successful",
+//     success: true,
+//     username: req.user.username,
+//     status: 201
+//   });
+// })
+router.post("/signup", signup)
 
 router.post("/login", async (req, res, next) => {
   passport.authenticate(

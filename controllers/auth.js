@@ -6,6 +6,7 @@ const JWTStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const bcrypt = require("bcryptjs");
 const { StatusCodes } = require("http-status-codes");
+const argon2 = require('argon2');
 const {
   BadRequestError
 } = require("../error");
@@ -17,75 +18,96 @@ const { send } = require("../utils")
 
 const emailQueue = require("../utils/sendEmailQueue");
 
-passport.use(
-  'signup', new LocalStrategy({
-    usernameField: "email",
-    passwordField: "password",
-    passReqToCallback: true
-  }, async (req, email, password, done) => {
-    try {
-      const user = await User.create({
-        ...req.body
-      });
+const signup = async (req, res) => {
+  try {
+    const user = await User.create({
+      ...req.body
+    });
 
-      return done(null, user, {
-        message: "User Created Successfully"
-      })
-    } catch (error) {
-      return done(error, {
-        message: "User could not be created, try again."
-      })
-    }
-  })
-);
+    return res.status( StatusCodes.CREATED ).json({
+      message: "User created successfully",
+      status: StatusCodes.CREATED,
 
-passport.use(
-  "login", new LocalStrategy({
-    usernameField: "email",
-    passwordField: "password",
-  }, async (email, password, done) => {
-    try {
-      const user = await User.findOne({email});
+    })
+  } catch (error) {
+    console.error(error);
+    return res.status( StatusCodes.INTERNAL_SERVER_ERROR ).json({
+      message: "User could not be created.",
+      success: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR
+    })
+  }
+}
 
-      if (!user) {
-        return done(null, false, {
-          message: "User not found"
-        })
-      }
+// passport.use(
+//   'signup', new LocalStrategy({
+//     usernameField: "email",
+//     passwordField: "password",
+//     passReqToCallback: true
+//   }, async (req, email, password, done) => {
+//     try {
+//       const user = await User.create({
+//         ...req.body
+//       });
 
-      const valid = user.comparePassword(password);
+//       return done(null, user, {
+//         message: "User Created Successfully"
+//       })
+//     } catch (error) {
+//       return done(error, {
+//         message: "User could not be created, try again."
+//       })
+//     }
+//   })
+// );
 
-      if (!valid) {
-        return done(null, false, {
-          message: "Wrong Password"
-        });
-      }
+// passport.use(
+//   "login", new LocalStrategy({
+//     usernameField: "email",
+//     passwordField: "password",
+//   }, async (email, password, done) => {
+//     try {
+//       const user = await User.findOne({email});
 
-      return done(null, user, {
-        message: "User Created successfully"
-      })
-    } catch (error) {
-      return done(error, {
-        message: "Could not login, try again."
-      });
-    }
-  })
-);
+//       if (!user) {
+//         return done(null, false, {
+//           message: "User not found"
+//         })
+//       }
 
-passport.use(
-  new JWTStrategy (
-    {
-      secretOrKey: process.env.SECRET,
-      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
-    }, async (token, done) => {
-      try {
-        return done(null, token.user);
-      } catch (error) {
-        done(error);
-      }
-    }
-  )
-);
+//       const valid = user.comparePassword(password);
+
+//       if (!valid) {
+//         return done(null, false, {
+//           message: "Wrong Password"
+//         });
+//       }
+
+//       return done(null, user, {
+//         message: "User Created successfully"
+//       })
+//     } catch (error) {
+//       return done(error, {
+//         message: "Could not login, try again."
+//       });
+//     }
+//   })
+// );
+
+// passport.use(
+//   new JWTStrategy (
+//     {
+//       secretOrKey: process.env.SECRET,
+//       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
+//     }, async (token, done) => {
+//       try {
+//         return done(null, token.user);
+//       } catch (error) {
+//         done(error);
+//       }
+//     }
+//   )
+// );
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body
@@ -224,6 +246,7 @@ const resetPassword = async (req, res) => {
 }
 
 module.exports = {
+  signup,
   forgotPassword,
   resetPassword
 }

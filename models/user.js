@@ -3,8 +3,10 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { check } = require("../utils/verifyNumber");
+const argon2 = require("argon2");
 const crypto = require("crypto");
+
+const { StatusCodes } = require("http-status-codes");
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -62,8 +64,15 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre('save', async function() {
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  // const salt = await bcrypt.genSalt(10);
+  // this.password = await bcrypt.hash(this.password, salt);
+
+  try {
+    this.password = await argon2.hash(this.password);
+  } catch (error) {
+    console.error(error);
+    throw new Error("User could not be created");
+  }
 });
 
 UserSchema.methods.createJWT = function() {
@@ -79,8 +88,14 @@ UserSchema.methods.createJWT = function() {
 
 UserSchema.methods.comparePassword = async function (password) {
   try {
-    const match = await bcrypt.compare(password, this.password);
-    return match
+    // const match = await bcrypt.compare(password, this.password);
+    // return match
+
+    if (await argon2.verify(this.password, password)) {
+      return match;
+    } else {
+      return false
+    }
   } catch (error) {
     throw new Error("Please provide valid password");
   }
