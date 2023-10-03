@@ -6,7 +6,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { NotFoundError } = require("../error");
 const {
-  signup,
+  signup, login,
   forgotPassword, resetPassword
 } = require("../controllers/auth");
 
@@ -19,50 +19,51 @@ const {
 //     status: 201
 //   });
 // })
-router.post("/signup", signup)
+router.post("/signup", signup);
+router.post("/login", login);
 
-router.post("/login", async (req, res, next) => {
-  passport.authenticate(
-    'login',
-    async (err, user, info) => {
-      try {
-        if (!user) {
-          const error = new NotFoundError("User not found");
-          return done(error);
-        }
+// router.post("/login", async (req, res, next) => {
+//   passport.authenticate(
+//     'login',
+//     async (err, user, info) => {
+//       try {
+//         if (!user) {
+//           const error = new NotFoundError("User not found");
+//           return done(error);
+//         }
 
-        if (err) {
-          const error = new Error("An Error Occured. Try again");
-          return next(error);
-        }
+//         if (err) {
+//           const error = new Error("An Error Occured. Try again");
+//           return next(error);
+//         }
 
-        req.login(
-          user, {session: false},
-          async (error) => {
-            if (error) {
-              return next(error);
-            }
+//         req.login(
+//           user, {session: false},
+//           async (error) => {
+//             if (error) {
+//               return next(error);
+//             }
 
-            const payload = {
-              userId: user._id,
-              email: user.email,
-            }
-            const token = jwt.sign({user: payload}, process.env.SECRET);
-            req.session.userId = user._id;
+//             const payload = {
+//               userId: user._id,
+//               email: user.email,
+//             }
+//             const token = jwt.sign({user: payload}, process.env.SECRET);
+//             req.session.userId = user._id;
 
-            return res.json({
-              message: "Login successful",
-              status: 200,
-              success: true
-            });
-          }
-        )
-      } catch (error) {
-        return next(error);
-      }
-    }
-  )(req, res, next);
-})
+//             return res.json({
+//               message: "Login successful",
+//               status: 200,
+//               success: true
+//             });
+//           }
+//         )
+//       } catch (error) {
+//         return next(error);
+//       }
+//     }
+//   )(req, res, next);
+// })
 
 router.post("/forgotPassword", forgotPassword);
 

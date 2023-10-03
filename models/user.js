@@ -92,7 +92,7 @@ UserSchema.methods.comparePassword = async function (password) {
     // return match
 
     if (await argon2.verify(this.password, password)) {
-      return match;
+      return true;
     } else {
       return false
     }

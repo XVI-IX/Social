@@ -1,12 +1,12 @@
 require("dotenv").config();
 
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const JWTStrategy = require("passport-jwt").Strategy;
-const ExtractJWT = require('passport-jwt').ExtractJwt;
+// const passport = require("passport");
+// const LocalStrategy = require("passport-local").Strategy;
+// const JWTStrategy = require("passport-jwt").Strategy;
+// const ExtractJWT = require('passport-jwt').ExtractJwt;
 const bcrypt = require("bcryptjs");
 const { StatusCodes } = require("http-status-codes");
-const argon2 = require('argon2');
+// const argon2 = require('argon2');
 const {
   BadRequestError
 } = require("../error");
@@ -61,6 +61,66 @@ const signup = async (req, res) => {
 //   })
 // );
 
+const login = async (req, res) => {
+  const payload = req.body;
+
+  if (payload) {
+    try {
+      const { email, password } = req.body;
+
+      try {
+        const user = await User.findOne({email});
+
+        if (!user) {
+          return res.status( StatusCodes.NOT_FOUND ).json({
+            message: "User not found.",
+            status: StatusCodes.NOT_FOUND,
+            success: false
+          })
+        }
+
+        const valid = user.comparePassword(password);
+
+        if (!valid) {
+          console.log("Wrong password")
+
+          return res.status( StatusCodes.UNAUTHORIZED ).json({
+            message: 'Invalid password',
+            success: false,
+            status: StatusCodes.UNAUTHORIZED
+          })
+        }
+
+        console.log("Login Successful");
+
+        req.session.user = user;
+
+        return res.status( StatusCodes.OK ).json({
+          message: "Login Successful.",
+          status: StatusCodes.OK,
+          success: true
+        });
+
+      } catch (error) {
+        console.error(error);
+        res.status( StatusCodes.INTERNAL_SERVER_ERROR ).json({
+          message: "[500]: an error has occured, try again later.",
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+          success: false
+        })
+      }
+
+    } catch (error) {
+      console.error(error);
+      return res.status( StatusCodes.BAD_REQUEST ).json({
+        message: "Data was not provided",
+        success: false,
+        status: StatusCodes.BAD_REQUEST
+      })
+    }
+  }
+}
+
 // passport.use(
 //   "login", new LocalStrategy({
 //     usernameField: "email",
@@ -108,6 +168,7 @@ const signup = async (req, res) => {
 //     }
 //   )
 // );
+
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body
@@ -247,6 +308,7 @@ const resetPassword = async (req, res) => {
 
 module.exports = {
   signup,
+  login,
   forgotPassword,
   resetPassword
 }
