@@ -67,7 +67,7 @@ const UserSchema = new mongoose.Schema({
     expires: 3600
   }
 }, {
-  timestamp: true,
+  timestamps: true,
 });
 
 UserSchema.pre('save', async function() {

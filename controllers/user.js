@@ -66,44 +66,58 @@ const followProfile = async (req, res) => {
         })
       }
 
-      if (profile.followers.includes(user_id)) {
+      if (user_id !== profile_id) {
+
+        if (profile.followers.includes(user_id)) {
+          try {
+
+            await User.findOneAndUpdate({
+              _id: profile_id
+            }, {
+              $inc: {follower_count: -1},
+              $pull: {followers: user_id}
+            }, {
+              new: true
+            })
+
+            res.status( StatusCodes.OK ).json({
+              message: `Unfollowed ${profile.username}`,
+              status: StatusCodes.OK,
+              success: true
+            });
+  
+          } catch (error) {
+            console.error(error);
+            throw new Error("Please try again later");
+          }
+        }
+  
         try {
           await User.findOneAndUpdate({
             _id: profile_id
           }, {
-            $inc: {follower_count: -1},
-            $pull: {followers: user_id}
+            $inc: {follower_count: 1},
+            $addToSet: {followers: user_id}
           })
-
-          res.status( StatusCodes.OK ).json({
-            message: `Unfollowed ${profile.username}`,
-            status: StatusCodes.OK,
-            success: true
-          });
-
+  
+          return res.status( StatusCodes.OK ).json({
+            message: `Following ${profile.username}`,
+            success: true,
+            status: StatusCodes.OK
+          })
         } catch (error) {
           console.error(error);
-          throw new Error("Please try again later");
         }
+  
       }
 
-      try {
-        await User.findOneAndUpdate({
-          _id: profile_id
-        }, {
-          $inc: {follower_count: 1},
-          $addToSet: {followers: user_id}
-        })
+      return res.status( StatusCodes.BAD_REQUEST ).json({
+        message: "You can't follow your account.",
+        success: false,
+        status: StatusCodes.BAD_REQUEST
+      })
 
-        return res.status( StatusCodes.OK ).json({
-          message: `Following ${profile.username}`,
-          success: true,
-          status: StatusCodes.OK
-        })
-      } catch (error) {
-        console.error(error);
-      }
-
+      
     } catch (error) {
       console.error(error);
     }
