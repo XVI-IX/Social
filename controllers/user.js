@@ -25,6 +25,10 @@ const getProfile = async (req, res) => {
   }
 }
 
+const getUser = async (req, res) => {
+  //TODO: Controller to handle getting a specific profile based on id.
+}
+
 const updateProfile = async (req, res) => {
   const userId = req.session.userId;
 
@@ -67,7 +71,7 @@ const followProfile = async (req, res) => {
       }
 
       if (user_id !== profile_id) {
-
+        // TODO: figure out why this doesn't update the fields specified.
         if (profile.followers.includes(user_id)) {
           try {
 
@@ -126,6 +130,7 @@ const followProfile = async (req, res) => {
 
 module.exports = {
   getProfile,
+  getUser,
   updateProfile,
   followProfile
 }
