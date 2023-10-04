@@ -6,7 +6,7 @@ const {
 
 
 const authMiddleware = async (req, res, next) => {
-  const userId = req.session.userId;
+  const userId = req.session.user._id;
 
   if (!userId) {
     res.status( StatusCodes.UNAUTHORIZED ).json({

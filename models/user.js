@@ -1,12 +1,9 @@
 require("dotenv").config();
 
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const crypto = require("crypto");
-
-const { StatusCodes } = require("http-status-codes");
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -53,6 +50,16 @@ const UserSchema = new mongoose.Schema({
     //   },
     //   message: props => `${props.value} is not a valid phone number!`
     // }
+  },
+  follower_count: {
+    type: Number,
+    default: 0
+  },
+  followers: {
+    type: [String]
+  },
+  following: {
+    type: [String]
   },
   resetToken: {
     type: String,
