@@ -71,6 +71,29 @@ const {
  *  put:
  *    summary: Update user's profile
  *    tags: [User]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/User'
+ *    responses:
+ *      200:
+ *        description: updated user data
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
+ *      500:
+ *        description: internal server error
+ *        content:
+ *          application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *              
  */
 router.get("/profile", getProfile);
 router.patch("/profile", updateProfile);

@@ -9,10 +9,12 @@ const PostSchema = new mongoose.Schema({
     desc: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users"
-    }
+    },
+    required: true
   },
   content: {
-    type: String
+    type: String,
+    required: true
   },
   img_url: {
     type: String
