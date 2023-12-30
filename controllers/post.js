@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const { StatusCodes } = require("http-status-codes");
-const { UnAuthenticatedError, BadRequestError, ForbiddenError } = require("../error");
+const { InternalServerError, BadRequestError, ForbiddenError } = require("../error");
 const { User, Post } = require("../models");
 const { uploadUtil } = require("../utils/cloudinary");
 
@@ -158,7 +158,9 @@ const sharePost = async (req, res) => {
       link: `${process.env.URL}/posts/${postId}`
     })
   } catch (error) {
-    
+    console.error(error)
+
+    throw new InternalServerError("Share link could not be accessed, try again.");
   }
 }
 
